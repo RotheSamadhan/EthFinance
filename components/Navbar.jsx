@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import Axios from "axios";
 import Link from "next/link";
 import Style from "../Styles/Navbar.module.css";
-import avatrar from "../avatar.jpg";
-import eth from "../eth1.png";
+import L_logo from "../madara.png";
 import evm from "../evm.png";
-import loader from "../loader.gif";
+import logo from "../GLANCE2.png";
 import axios from "axios";
+import { MdOutlineClose } from "react-icons/md";
+import { AiOutlineAreaChart } from "react-icons/ai";
 
 const Navbar = () => {
   const [userAccount, setUserAccount] = useState("");
@@ -17,6 +17,16 @@ const Navbar = () => {
   const [price, setPrice] = useState([]);
   const [etherSupply, setEtherSupply] = useState([]);
   const [updatedPriceDate, setUpdatedPriceDate] = useState("");
+
+  // calling from {style.right} and openModel is true when metamask will be on
+  //
+  const openUserInfo = () => {
+    if (openModel) {
+      setOpenModel(false);
+    } else if (!openModel) {
+      setOpenModel(true);
+    }
+  };
 
   // TO get the price of Ether by using API.
   // here is a API key but added now in .env file
@@ -93,9 +103,7 @@ const Navbar = () => {
     check_account();
     set_ethSupply();
   }, []);
-
   //Navbar all structuring
-
   return (
     <div>
       <div className={Style.navbar}>
@@ -103,14 +111,87 @@ const Navbar = () => {
           <div className={Style.left}>
             <Link href="/">
               <div>
-                <h1 className={Style.desktop}>
-                  <h1 className={Style.mobile}>Ether Finance</h1>
-                  <Image src={eth} alt="logo" width={50} height={50} />
-                </h1>
+                <h2 className={Style.desktop}>
+                  <h2 className={Style.mobile}>Ether glance</h2>
+                </h2>
               </div>
             </Link>
           </div>
-          <div className={Style.right}>hey</div>
+          {/*if wallet account is present then button will show up */}
+          <div className={Style.right}>
+            {userAccount.length ? (
+              <div className={Style.connected}>
+                <button onClick={() => openUserInfo()}>
+                  {" "}
+                  {/* button of account created*/}
+                  Acc:{userAccount.slice(0, 10)}...
+                </button>
+                {openModel ? (
+                  <div className={Style.usermodal}>
+                    <div className={Style.user_box}>
+                      <div className={Style.closebtn}>
+                        <MdOutlineClose onClick={() => openUserInfo()} />
+                      </div>
+                      <Image
+                        src={L_logo}
+                        alt="L_logo"
+                        width={220}
+                        height={50}
+                      />
+                      <p>
+                        <b>Account :</b> &nbsp; {userAccount}
+                      </p>
+                      <p>
+                        <b>Balance :</b> &nbsp; {balance} ETH
+                      </p>
+                      <p>
+                        <b>Total Transaction :</b> &nbsp;count ETH
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+            ) : (
+              <button onClick={() => wallet_account()}></button>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className={Style.price}>
+        <div className={Style.price_box}>
+          <div className={Style.etherPrice}>
+            <div>
+              <Image src={evm} alt="evm logo" width={40} height={40} />
+            </div>
+            <div>
+              <h4>Ether Price</h4>
+              <p>$ 23555</p>
+              <p>BTC 3355</p>
+              <p>Updated Price</p>
+            </div>
+            <div className={Style.supplyEther}>
+              <AiOutlineAreaChart className={Style.supplyIcon} />
+            </div>
+            <div>
+              <h4>TOTAL ETHER SUPPLY</h4>
+              <p>$ 23555</p>
+              <p>BTC 3355</p>
+              <p>Updated Price</p>
+            </div>
+          </div>
+        </div>
+        <div className={Style.price_box}>
+          <div className={Style.TokenBox_logo}>
+            <Image src={logo} alt="loader logo" width={450} height={110} />
+          </div>
+          <div className={Style.logoWidth}>
+            <p>ERC20</p>
+            <p>ERC21 </p>
+            <p>ERC1155</p>
+            <p>CONTRACT</p>
+          </div>
         </div>
       </div>
     </div>
